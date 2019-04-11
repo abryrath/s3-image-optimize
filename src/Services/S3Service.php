@@ -2,17 +2,17 @@
 
 namespace App\Services;
 
-use SplFileInfo;
 use App\Models\File;
 use Aws\S3\S3Client;
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
 use Doctrine\Common\Collections\ArrayCollection;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use SplFileInfo;
 use Symfony\Component\Console\Input\InputInterface;
 
 class S3Service
 {
-    /** @var S3Client $client */
+    /** @var null|S3Client $client */
     protected $client;
 
     /** @var string $bucket */
@@ -20,13 +20,6 @@ class S3Service
 
     /** @var string $subFolder */
     public $subFolder = '';
-
-
-    public function __construct()
-    {
-        
-        // $opts = $this->parseInput($input);
-    }
 
     /**
      * Convert the input options into a useable format
@@ -67,15 +60,10 @@ class S3Service
                 'secret' => $secretAccessKey,
             ];
         }
-        
+
         $this->client = new S3Client($opts);
         $this->client->registerStreamWrapper();
         return $opts;
-    }
-
-    public function listBuckets()
-    {
-        return $this->client->listBuckets();
     }
 
     /**
@@ -93,21 +81,26 @@ class S3Service
 
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir));
         $files = new ArrayCollection([]);
-        
-        $limit = 3;
-        $count = 0;
 
         /** @var SplFileInfo $file */
         foreach ($iterator as $file) {
-            if ($count++ > $limit) {
-                break;
-            }
-            
             $file = new File($file);
 
             $files->add($file);
         }
 
         return $files;
+    }
+
+    /**
+     * Replace the files on S3 with the optimized versions
+     * @return void
+     */
+    public function replaceFiles(ArrayCollection $files)
+    {
+        foreach ($files as $file) {
+            $contents = \file_get_contents($file->outputPath);
+            \file_put_contents($file->splFileInfo->getPathname(), $contents);
+        }
     }
 }

@@ -6,6 +6,7 @@ use App\Models\File;
 use App\Services\S3Service;
 use App\Services\ImagickService;
 use Symfony\Component\Console\Command\Command;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -26,7 +27,7 @@ class OptimizeCommand extends Command
     {
         $this->s3 = $s3;
         $this->imagick = $imagick;
-        
+
         parent::__construct();
     }
 
@@ -49,16 +50,38 @@ class OptimizeCommand extends Command
             );
     }
 
+    /**
+     * @return null|int
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
-    {        
-        
+    {
         $this->s3->parseInput($input);
+        $this->imagick->setOutput($output);
+
+        /**
+         * Get all of the files in the bucket/subfolder
+         * @var ArrayCollection $files
+         */
         $files = $this->s3->getBucketContents();
         if (!$files) {
-            return false;
+            return 1;
         }
-        $result = $this->imagick->optimize($files);
 
-        $output->write(\json_encode($result, JSON_PRETTY_PRINT));
+        /**
+         * Get a collection of valid, optimized files
+         * @var ArrayCollection $optimized
+         */
+        $optimized = $this->imagick->optimize($files);
+        $output->writeln('Successfully optimized ' . $optimized->count() . ' files. Preparing to upload to S3');
+        
+        /**
+         * Replace the files on S3
+         * @var int $result
+         */
+        $result = $this->s3->replaceFiles($optimized);
+        $output->writeln('Successfully replaced ' . $result . ' files on S3');
+        $output->writeln('Complete');
+
+        return 0;
     }
 }

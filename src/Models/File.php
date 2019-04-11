@@ -7,9 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class File
 {
-    // /** @var string $key */
-    // private $key = '';
-
     /** @var string $name */
     public $name = '';
 
@@ -25,6 +22,11 @@ class File
     /** @var SplFileInfo $splFileInfo */
     public $splFileInfo;
 
+    /** @var null|string $outputPath */
+    public $outputPath;
+
+    /** @var bool $skip */
+    public $skip = false;
 
     /**
      * @param array $opts
@@ -32,20 +34,9 @@ class File
     public function __construct(SplFileInfo $splFileInfo)
     {
         $this->splFileInfo = $splFileInfo;
-        // $this->url = $splFileInfo->getPathname();
         $this->name = $splFileInfo->getFilename();
-        $this->type = $splFileInfo->getType();
         $this->extension = $splFileInfo->getExtension();
         $this->size = $splFileInfo->getSize();
-        
-        $this->originalFilePath = '';
-        $this->optimizedFilePath = '';
-    }
-
-    public function optimize(int $sizeThreshold): self
-    {
-        // $file = file_get_contents()
-        return $this;
     }
 
     public function getUrl(): string
