@@ -37,8 +37,8 @@ class OptimizeCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Get a list of assets from the S3 Bucket')
-            ->setHelp('This command lists all assets from the S3 Bucket')
+            ->setDescription('Optimize S3 image assets to under a given threshold')
+            // ->setHelp('This command lists all assets from the S3 Bucket')
             ->setDefinition(
                 new InputDefinition([
                     new InputOption('region', 'r', InputOption::VALUE_OPTIONAL),

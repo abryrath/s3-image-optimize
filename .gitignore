@@ -13,5 +13,7 @@
 /phpcs.xml
 ###< squizlabs/php_codesniffer ###
 
-optimize/
+optimized/
 original/
+.vscode/
+.DS_Store
