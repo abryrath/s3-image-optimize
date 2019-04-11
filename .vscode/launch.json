@@ -1,0 +1,31 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Listen for XDebug",
+            "type": "php",
+            "request": "launch",
+            "port": 9000
+        },
+        {
+            "name": "Launch currently open script",
+            "type": "php",
+            "request": "launch",
+            "program": "${file}",
+            "cwd": "${fileDirname}",
+            "port": 9000
+        },
+        {
+            "name": "List Assets",
+            "type": "php",
+            "request": "launch",
+            "program": "${workspaceRoot}/bin/console",
+            "args": ["optimize", "-r", "us-east-1", "-b", "s3-testing-abryrath", "-a", "AKIARDPBAZF5F6INW3VM", "-s", "g+b8NlcBox6iewngAi7HwHcHqgXVR7mPCavyhaqS"],
+            "cwd": "${workspaceRoot}",
+            "port": 9073
+        }
+    ]
+}
