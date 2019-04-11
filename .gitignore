@@ -17,3 +17,4 @@ optimized/
 original/
 .vscode/
 .DS_Store
+.env
