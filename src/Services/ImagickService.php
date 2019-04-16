@@ -172,7 +172,7 @@ class ImagickService
      * @param ArrayCollection<array-key,File> $files
      * @return ArrayCollection<array-key,File>
      */
-    private function filterFormats(ArrayCollection $files): ArrayCollection
+    public function filterFormats(ArrayCollection $files): ArrayCollection
     {
         return $files->filter(
             /**
@@ -185,7 +185,7 @@ class ImagickService
         );
     }
 
-    private function filterFileSize(ArrayCollection $files): ArrayCollection
+    public function filterFileSize(ArrayCollection $files): ArrayCollection
     {
         return $files->filter(
             /**

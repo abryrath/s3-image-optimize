@@ -29,6 +29,9 @@
     "guzzlehttp/psr7": {
         "version": "1.5.2"
     },
+    "league/csv": {
+        "version": "8.2.3"
+    },
     "mtdowling/jmespath.php": {
         "version": "2.4.0"
     },
